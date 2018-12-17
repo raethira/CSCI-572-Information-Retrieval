@@ -1,0 +1,2937 @@
+<!DOCTYPE html>
+
+
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content=" ">
+
+<title>Solr Tutorial | Apache Solr Reference Guide 7.5</title>
+
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">-->
+<link rel="stylesheet" href="css/lavish-bootstrap.css">
+<link rel="stylesheet" href="css/customstyles.css">
+<link rel="stylesheet" href="css/theme-solr.css">
+<link rel="stylesheet" href="css/ref-guide.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="js/jquery.navgoco.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/2.0.0/anchor.min.js"></script>
+<script src="js/toc.js"></script>
+<script src="js/customscripts.js"></script>
+
+<link rel="shortcut icon" href="images/icons/favicon.ico">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+    <script>
+        $(document).ready(function() {
+            // Initialize navgoco with default options
+            $("#mysidebar").navgoco({
+                caretHtml: '',
+                accordion: true,
+                openClass: 'active', // open
+                save: false, // we do *NOT* want cookies used to save the current stage of the sidebar
+                             // instead the code in sidebar.html will ensure that the current page
+                             // (and it's ancestors) are "active" on page load
+                slide: {
+                    duration: 400,
+                    easing: 'swing'
+                }
+            });
+
+            $("#collapseAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', false);
+            });
+
+            $("#expandAll").click(function(e) {
+                e.preventDefault();
+                $("#mysidebar").navgoco('toggle', true);
+            });
+
+        });
+
+    </script>
+</head>
+<body class="" id="solr-tutorial">
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container topnavlinks">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <a class="fa fa-home fa-lg navbar-brand" href="index.html">&nbsp;<span class="projectTitle"> Solr Ref Guide 7.5</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <!-- Link to Solr website -->
+                <li><a href="https://lucene.apache.org/solr/" target="_blank">Solr Website</a></li>
+                <!-- Other Guide Formats dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other Formats<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://www.apache.org/dyn/closer.cgi/lucene/solr/ref-guide" target="_blank">PDF for Latest Release</a></li>
+                       <li><a href="https://archive.apache.org/dist/lucene/solr/ref-guide/" target="_blank">Archived PDFs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/guide/" target="_blank">Other Versions Online</a></li>
+                    </ul>
+                </li>
+                <!-- Solr Resources dropdown -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Solr Resources<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                       <li><a href="https://lucene.apache.org/solr/7_5_0//solr-core/index.html" target="_blank">Solr Javadocs</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html#version-control" target="_blank">Lucene/Solr Source Code</a></li>
+                       <li><a href="https://lucene.apache.org/solr/community.html" target="_blank">Solr Community Links</a></li>
+                    </ul>
+                </li>
+                <!--comment out this block if you want to hide search-->
+                <li>
+                    <!--start search-->
+                    <div id="search-demo-container">
+                        <input type="text" id="search-input" placeholder="Page title lookup...">
+                        <ul id="results-container"></ul>
+                    </div>
+                    <script src="js/jekyll-search.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                            SimpleJekyllSearch.init({
+                                searchInput: document.getElementById('search-input'),
+                                resultsContainer: document.getElementById('results-container'),
+                                dataSource: 'search.json',
+                                searchResultTemplate: '<li><a href="{url}" title="Solr Tutorial">{title}</a></li>',
+                    noResultsText: 'No results found.',
+                            limit: 10,
+                            fuzzy: true,
+                    })
+                    </script>
+                    <!--end search-->
+                </li>
+            </ul>
+        </div>
+        </div>
+        <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+  <div class="col-lg-12">&nbsp;</div>
+  <!-- Content Row -->
+  <div class="row">
+    <!-- Sidebar Column -->
+    <div class="col-md-3">
+      
+
+<ul id="mysidebar" class="nav">
+  <li class="sidebarTitle">Apache Solr Reference Guide</li>
+  
+  
+  <li class="sb-level1">
+    <a href="about-this-guide.html">About This Guide</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="getting-started.html">Getting Started</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="solr-tutorial.html">Solr Tutorial</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="a-quick-overview.html">A Quick Overview</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="solr-system-requirements.html">Solr System Requirements</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="installing-solr.html">Installing Solr</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="deployment-and-operations.html">Deployment and Operations</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="solr-control-script-reference.html">Solr Control Script Reference</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="solr-configuration-files.html">Solr Configuration Files</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="taking-solr-to-production.html">Taking Solr to Production</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="making-and-restoring-backups.html">Making and Restoring Backups</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="running-solr-on-hdfs.html">Running Solr on HDFS</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="aws-solrcloud-tutorial.html">SolrCloud on AWS EC2</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="upgrading-a-solr-cluster.html">Upgrading a Solr Cluster</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="indexupgrader-tool.html">IndexUpgrader Tool</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="solr-upgrade-notes.html">Solr Upgrade Notes</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="major-changes-in-solr-7.html">Major Changes in Solr 7</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="major-changes-from-solr-5-to-solr-6.html">Major Changes from Solr 5 to Solr 6</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="using-the-solr-administration-user-interface.html">Using the Solr Administration User Interface</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="overview-of-the-solr-admin-ui.html">Overview of the Solr Admin UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="getting-assistance.html">Getting Assistance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="logging.html">Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="cloud-screens.html">Cloud Screens</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="collections-core-admin.html">Collections / Core Admin</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="java-properties.html">Java Properties</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="thread-dump.html">Thread Dump</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="suggestions-screen.html">Suggestions Screen</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="collection-specific-tools.html">Collection-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="analysis-screen.html">Analysis Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="dataimport-screen.html">Dataimport Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="documents-screen.html">Documents Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="files-screen.html">Files Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="query-screen.html">Query Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="stream-screen.html">Stream Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="schema-browser-screen.html">Schema Browser Screen</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="core-specific-tools.html">Core-Specific Tools</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="ping.html">Ping</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="plugins-stats-screen.html">Plugins &amp; Stats Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="replication-screen.html">Replication Screen</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="segments-info.html">Segments Info</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="documents-fields-and-schema-design.html">Documents, Fields, and Schema Design</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="overview-of-documents-fields-and-schema-design.html">Overview of Documents, Fields, and Schema Design</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="solr-field-types.html">Solr Field Types</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="field-type-definitions-and-properties.html">Field Type Definitions and Properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="field-types-included-with-solr.html">Field Types Included with Solr</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="working-with-currencies-and-exchange-rates.html">Working with Currencies and Exchange Rates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="working-with-dates.html">Working with Dates</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="working-with-enum-fields.html">Working with Enum Fields</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="working-with-external-files-and-processes.html">Working with External Files and Processes</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="field-properties-by-use-case.html">Field Properties by Use Case</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="defining-fields.html">Defining Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="copying-fields.html">Copying Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="dynamic-fields.html">Dynamic Fields</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="other-schema-elements.html">Other Schema Elements</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="schema-api.html">Schema API</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="putting-the-pieces-together.html">Putting the Pieces Together</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="docvalues.html">DocValues</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="schemaless-mode.html">Schemaless Mode</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="understanding-analyzers-tokenizers-and-filters.html">Understanding Analyzers, Tokenizers, and Filters</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="analyzers.html">Analyzers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="about-tokenizers.html">About Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="about-filters.html">About Filters</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="tokenizers.html">Tokenizers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="filter-descriptions.html">Filter Descriptions</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="charfilterfactories.html">CharFilterFactories</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="language-analysis.html">Language Analysis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="phonetic-matching.html">Phonetic Matching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="running-your-analyzer.html">Running Your Analyzer</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="indexing-and-basic-data-operations.html">Indexing and Basic Data Operations</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="introduction-to-solr-indexing.html">Introduction to Solr Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="post-tool.html">Post Tool</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="uploading-data-with-index-handlers.html">Uploading Data with Index Handlers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="transforming-and-indexing-custom-json.html">Transforming and Indexing Custom JSON</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="uploading-data-with-solr-cell-using-apache-tika.html">Uploading Data with Solr Cell using Apache Tika</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="uploading-structured-data-store-data-with-the-data-import-handler.html">Uploading Structured Data Store Data with the Data Import Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="updating-parts-of-documents.html">Updating Parts of Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="detecting-languages-during-indexing.html">Detecting Languages During Indexing</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="de-duplication.html">De-Duplication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="content-streams.html">Content Streams</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="searching.html">Searching</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="overview-of-searching-in-solr.html">Overview of Searching in Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="velocity-search-ui.html">Velocity Search UI</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="relevance.html">Relevance</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="query-syntax-and-parsing.html">Query Syntax and Parsing</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="common-query-parameters.html">Common Query Parameters</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="the-standard-query-parser.html">The Standard Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="the-dismax-query-parser.html">The DisMax Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="the-extended-dismax-query-parser.html">The Extended DisMax (eDismax) Query Parser</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="function-queries.html">Function Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="local-parameters-in-queries.html">Local Parameters in Queries</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="other-parsers.html">Other Parsers</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="json-request-api.html">JSON Request API</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="json-query-dsl.html">JSON Query DSL</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="json-facet-api.html">JSON Facet API</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="faceting.html">Faceting</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="blockjoin-faceting.html">BlockJoin Faceting</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="highlighting.html">Highlighting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="spell-checking.html">Spell Checking</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="query-re-ranking.html">Query Re-Ranking</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="learning-to-rank.html">Learning To Rank</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="transforming-result-documents.html">Transforming Result Documents</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="suggester.html">Suggester</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="morelikethis.html">MoreLikeThis</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="pagination-of-results.html">Pagination of Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="collapse-and-expand-results.html">Collapse and Expand Results</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="result-grouping.html">Result Grouping</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="result-clustering.html">Result Clustering</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="spatial-search.html">Spatial Search</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="the-terms-component.html">The Terms Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="the-term-vector-component.html">The Term Vector Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="the-stats-component.html">The Stats Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="the-query-elevation-component.html">The Query Elevation Component</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="the-tagger-handler.html">The Tagger Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="response-writers.html">Response Writers</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="velocity-response-writer.html">Velocity Response Writer</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="near-real-time-searching.html">Near Real Time Searching</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="realtime-get.html">RealTime Get</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="exporting-result-sets.html">Exporting Result Sets</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="parallel-sql-interface.html">Parallel SQL Interface</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="solr-jdbc-dbvisualizer.html">Solr JDBC - DbVisualizer</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solr-jdbc-squirrel-sql.html">Solr JDBC - SQuirreL SQL</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solr-jdbc-apache-zeppelin.html">Solr JDBC - Apache Zeppelin</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solr-jdbc-python-jython.html">Solr JDBC - Python/Jython</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solr-jdbc-r.html">Solr JDBC - R</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="analytics.html">Analytics Component</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="analytics-expression-sources.html">Analytics Expression Sources</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="analytics-mapping-functions.html">Analytics Mapping Functions</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="analytics-reduction-functions.html">Analytics Reduction Functions</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="streaming-expressions.html">Streaming Expressions</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="stream-source-reference.html">Stream Source Reference</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="stream-decorator-reference.html">Stream Decorator Reference</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="stream-evaluator-reference.html">Stream Evaluator Reference</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="math-expressions.html">Math Expressions</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="scalar-math.html">Scalar Math</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="vector-math.html">Vector Math</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="variables.html">Variables</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="matrix-math.html">Matrices and Matrix Math</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="vectorization.html">Streams and Vectorization</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="term-vectors.html">Text Analysis and Term Vectors</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="statistics.html">Statistics</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="probability-distributions.html">Probability Distributions</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="simulations.html">Monte Carlo Simulations</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="time-series.html">Time Series</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="regression.html">Linear Regression</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="numerical-analysis.html">Interpolation, Derivatives and Integrals</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="curve-fitting.html">Curve Fitting</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="dsp.html">Digital Signal Processing</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="machine-learning.html">Machine Learning</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="graph-traversal.html">Graph Traversal</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="solrcloud.html">SolrCloud</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="getting-started-with-solrcloud.html">Getting Started with SolrCloud</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="how-solrcloud-works.html">How SolrCloud Works</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="shards-and-indexing-data-in-solrcloud.html">Shards and Indexing Data in SolrCloud</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="distributed-requests.html">Distributed Requests</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="time-routed-aliases.html">Time Routed Aliases</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="solrcloud-resilience.html">SolrCloud Resilience</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-recoveries-and-write-tolerance.html">SolrCloud Recoveries and Write Tolerance</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-query-routing-and-read-tolerance.html">SolrCloud Query Routing And Read Tolerance</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="solrcloud-configuration-and-parameters.html">SolrCloud Configuration and Parameters</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="setting-up-an-external-zookeeper-ensemble.html">Setting Up an External ZooKeeper Ensemble</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="using-zookeeper-to-manage-configuration-files.html">Using ZooKeeper to Manage Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="zookeeper-access-control.html">ZooKeeper Access Control</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="collections-api.html">Collections API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="parameter-reference.html">Parameter Reference</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="command-line-utilities.html">Command Line Utilities</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-with-legacy-configuration-files.html">SolrCloud with Legacy Configuration Files</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="configsets-api.html">Configsets API</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="rule-based-replica-placement.html">Rule-based Replica Placement</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="cross-data-center-replication-cdcr.html">Cross Data Center Replication (CDCR)</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="cdcr-architecture.html">CDCR Architecture</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="cdcr-config.html">CDCR Configuration</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="cdcr-operations.html">Cross Data Center Replication Operations</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="cdcr-api.html">CDCR API</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="solrcloud-autoscaling.html">SolrCloud Autoscaling</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-autoscaling-overview.html">Overview of SolrCloud Autoscaling</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-autoscaling-policy-preferences.html">Autoscaling Policy and Preferences</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-autoscaling-triggers.html">SolrCloud Autoscaling Triggers</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-autoscaling-trigger-actions.html">SolrCloud Autoscaling Trigger Actions</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-autoscaling-listeners.html">SolrCloud Autoscaling Listeners</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-autoscaling-auto-add-replicas.html">SolrCloud Autoscaling Automatically Adding Replicas</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-autoscaling-fault-tolerance.html">SolrCloud Autoscaling Fault Tolerance</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="solrcloud-autoscaling-api.html">Autoscaling API</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="colocating-collections.html">Colocating Collections</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="legacy-scaling-and-distribution.html">Legacy Scaling and Distribution</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="introduction-to-scaling-and-distribution.html">Introduction to Scaling and Distribution</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="distributed-search-with-index-sharding.html">Distributed Search with Index Sharding</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="index-replication.html">Index Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="combining-distribution-and-replication.html">Combining Distribution and Replication</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="merging-indexes.html">Merging Indexes</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="the-well-configured-solr-instance.html">The Well-Configured Solr Instance</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="configuring-solrconfig-xml.html">Configuring solrconfig.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="datadir-and-directoryfactory-in-solrconfig.html">DataDir and DirectoryFactory in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="resource-and-plugin-loading.html">Resource and Plugin Loading</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="schema-factory-definition-in-solrconfig.html">Schema Factory Definition in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="indexconfig-in-solrconfig.html">IndexConfig in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="requesthandlers-and-searchcomponents-in-solrconfig.html">RequestHandlers and SearchComponents in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="initparams-in-solrconfig.html">InitParams in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="updatehandlers-in-solrconfig.html">UpdateHandlers in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="query-settings-in-solrconfig.html">Query Settings in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="requestdispatcher-in-solrconfig.html">RequestDispatcher in SolrConfig</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="update-request-processors.html">Update Request Processors</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="codec-factory.html">Codec Factory</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="solr-cores-and-solr-xml.html">Solr Cores and solr.xml</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="format-of-solr-xml.html">Format of solr.xml</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="defining-core-properties.html">Defining core.properties</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="coreadmin-api.html">CoreAdmin API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="config-sets.html">Config Sets</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="configuration-apis.html">Configuration APIs</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="blob-store-api.html">Blob Store API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="config-api.html">Config API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="request-parameters-api.html">Request Parameters API</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="managed-resources.html">Managed Resources</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="implicit-requesthandlers.html">Implicit RequestHandlers</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="solr-plugins.html">Solr Plugins</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="adding-custom-plugins-in-solrcloud-mode.html">Adding Custom Plugins in SolrCloud Mode</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="jvm-settings.html">JVM Settings</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="v2-api.html">v2 API</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="monitoring-solr.html">Monitoring Solr</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="metrics-reporting.html">Metrics Reporting</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="metrics-history.html">Metrics History</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="mbean-request-handler.html">MBean Request Handler</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="configuring-logging.html">Configuring Logging</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="using-jmx-with-solr.html">Using JMX with Solr</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="monitoring-solr-with-prometheus-and-grafana.html">Monitoring Solr with Prometheus and Grafana</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="performance-statistics-reference.html">Performance Statistics Reference</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="securing-solr.html">Securing Solr</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="authentication-and-authorization-plugins.html">Authentication and Authorization Plugins</a>
+        
+        <ul>
+          
+          <li class="sb-level3">
+            <a href="basic-authentication-plugin.html">Basic Authentication Plugin</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="hadoop-authentication-plugin.html">Hadoop Authentication Plugin</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="kerberos-authentication-plugin.html">Kerberos Authentication Plugin</a>
+            
+          </li>
+          
+          <li class="sb-level3">
+            <a href="rule-based-authorization-plugin.html">Rule-Based Authorization Plugin</a>
+            
+          </li>
+          
+        </ul>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="enabling-ssl.html">Enabling SSL</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="client-apis.html">Client APIs</a>
+    
+    <ul>
+      
+      <li class="sb-level2">
+        <a href="introduction-to-client-apis.html">Introduction to Client APIs</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="choosing-an-output-format.html">Choosing an Output Format</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="client-api-lineup.html">Client API Lineup</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="using-javascript.html">Using JavaScript</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="using-python.html">Using Python</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="using-solrj.html">Using SolrJ</a>
+        
+      </li>
+      
+      <li class="sb-level2">
+        <a href="using-solr-from-ruby.html">Using Solr From Ruby</a>
+        
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="further-assistance.html">Further Assistance</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="solr-glossary.html">Solr Glossary</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="errata.html">Errata</a>
+    
+  </li>
+  
+  <li class="sb-level1">
+    <a href="how-to-contribute.html">How to Contribute to Solr Documentation</a>
+    
+  </li>
+  
+</ul>
+
+
+<!-- set the 'active' class on the current page and ancestors -->
+<!-- this highlights the active parent class in the navgoco sidebar. this is critical so that the parent expands when you're viewing a page. This must appear below the sidebar code above. Otherwise, if placed inside customscripts.js, the script runs before the sidebar code runs and the class never gets inserted.-->
+<script>$("#mysidebar a[href='solr-tutorial.html']").parents('li').toggleClass("active", true);</script>
+<!-- set the 'current' class on the current page and 'current-tree' on the current page + it's ancestors -->
+<!-- this can let us do css highlighting of the current page in the sidebar even if/when the user clicks around in the sidebar causing other sidebar elements to be 'active' -->
+<script>
+  $("#mysidebar a[href='solr-tutorial.html']").parent('li').toggleClass("current", true);
+  $("#mysidebar a[href='solr-tutorial.html']").parents('li').toggleClass("current-tree", true);
+</script>
+
+    </div>
+    <!-- Content Column -->
+    <div class="col-md-9">
+      
+
+<div class="post-header">
+   <h1 class="post-title-main">Solr Tutorial</h1>
+</div>
+
+<!-- This adds a workflow map, to a page
+     See http://idratherbewriting.com/documentation-theme-jekyll/mydoc_workflow_maps.html
+     Leaving it here commented out in case we want to implement this in the future
+ -->
+
+<div class="post-content">
+
+   
+
+    
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+
+<script src="js/ref-guide-toc.js" type="text/javascript"></script>
+<script type="text/javascript">
+  // based on page variables, build up the list of headers for the top level toc (and any sub-section tocs)
+  do_tocs(2)
+</script>
+<div id="toc" class="toc toc-right"></div>
+
+    
+
+<div class="main-content">
+  <div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This tutorial covers getting Solr up and running, ingesting a variety of data sources into Solr collections,
+and getting a feel for the Solr administrative and search interfaces.</p>
+</div>
+<div class="paragraph">
+<p>The tutorial is organized into three sections that each build on the one before it. The <a href="#exercise-1">first exercise</a> will ask you to start Solr, create a collection, index some basic documents, and then perform some searches.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="#exercise-2">second exercise</a> works with a different set of data, and explores requesting facets with the dataset.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="#exercise-3">third exercise</a> encourages you to begin to work with your own data and start a plan for your implementation.</p>
+</div>
+<div class="paragraph">
+<p>Finally, we&#8217;ll introduce <a href="#spatial-queries">spatial search</a> and show you how to get your Solr instance back into a clean state.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="before-you-begin">Before You Begin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To follow along with this tutorial, you will need&#8230;&#8203;</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>To meet the <a href="https://lucene.apache.org/solr/7_5_0//SYSTEM_REQUIREMENTS.html">system requirements</a></p>
+</li>
+<li>
+<p>An Apache Solr release <a href="http://lucene.apache.org/solr/downloads.html">download</a>. This tutorial is designed for Apache Solr 7.5.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For best results, please run the browser showing this tutorial and the Solr server on the same machine so tutorial links will correctly point to your Solr server.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="unpack-solr">Unpack Solr</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Begin by unzipping the Solr release and changing your working directory to the subdirectory where Solr was installed. For example, with a shell in UNIX, Cygwin, or MacOS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>~$ ls solr*
+solr-7.5.0.zip
+
+~$ unzip -q solr-7.5.0.zip
+
+~$ <span style="color: #008000">cd</span> solr-7.5.0/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you&#8217;d like to know more about Solr&#8217;s directory layout before moving to the first exercise, see the section <a href="installing-solr.html#directory-layout">Directory Layout</a> for details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="exercise-1">Exercise 1: Index Techproducts Example Data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This exercise will walk you through how to start Solr as a two-node cluster (both nodes on the same machine) and create a collection during startup. Then you will index some sample data that ships with Solr and do some basic searches.</p>
+</div>
+<div class="sect2">
+<h3 id="launch-solr-in-solrcloud-mode">Launch Solr in SolrCloud Mode</h3>
+<div class="paragraph">
+<p>To launch Solr, run: <code>bin/solr start -e cloud</code> on Unix or MacOS; <code>bin\solr.cmd start -e cloud</code> on Windows.</p>
+</div>
+<div class="paragraph">
+<p>This will start an interactive session that will start two Solr "servers" on your machine. This command has an option to run without prompting you for input (<code>-noprompt</code>), but we want to modify two of the defaults so we won&#8217;t use that option now.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>solr-7.5.0:$ ./bin/solr start -e cloud
+
+Welcome to the SolrCloud example!
+
+This interactive session will help you launch a SolrCloud cluster on your local workstation.
+To begin, how many Solr nodes would you like to run in your local cluster? (specify 1-4 nodes) [2]:</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first prompt asks how many nodes we want to run. Note the <code>[2]</code> at the end of the last line; that is the default number of nodes. Two is what we want for this example, so you can simply press <kbd>enter</kbd>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>Ok, let's start up 2 Solr nodes for your example SolrCloud cluster.
+Please enter the port for node1 [8983]:</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will be the port that the first node runs on. Unless you know you have something else running on port 8983 on your machine, accept this default option also by pressing <kbd>enter</kbd>. If something is already using that port, you will be asked to choose another port.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>Please enter the port for node2 [7574]:</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is the port the second node will run on. Again, unless you know you have something else running on port 8983 on your machine, accept this default option also by pressing <kbd>enter</kbd>. If something is already using that port, you will be asked to choose another port.</p>
+</div>
+<div class="paragraph">
+<p>Solr will now initialize itself and start running on those two nodes. The script will print the commands it uses for your reference.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>Starting up 2 Solr nodes for your example SolrCloud cluster.
+
+Creating Solr home directory /solr-7.5.0/example/cloud/node1/solr
+Cloning /solr-7.5.0/example/cloud/node1 into
+   /solr-7.5.0/example/cloud/node2
+
+Starting up Solr on port 8983 using command:
+"bin/solr" start -cloud -p 8983 -s "example/cloud/node1/solr"
+
+Waiting up to 180 seconds to see Solr running on port 8983 [\]
+Started Solr server on port 8983 (pid=34942). Happy searching!
+
+
+Starting up Solr on port 7574 using command:
+"bin/solr" start -cloud -p 7574 -s "example/cloud/node2/solr" -z localhost:9983
+
+Waiting up to 180 seconds to see Solr running on port 7574 [\]
+Started Solr server on port 7574 (pid=35036). Happy searching!
+
+INFO  - 2017-07-27 12:28:02.835; org.apache.solr.client.solrj.impl.ZkClientClusterStateProvider; Cluster at localhost:9983 ready</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice that two instances of Solr have started on two nodes. Because we are starting in SolrCloud mode, and did not define any details about an external ZooKeeper cluster, Solr launches its own ZooKeeper and connects both nodes to it.</p>
+</div>
+<div class="paragraph">
+<p>After startup is complete, you&#8217;ll be prompted to create a collection to use for indexing data.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>Now let's create a new collection for indexing documents in your 2-node cluster.
+Please provide a name for your new collection: [gettingstarted]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s the first place where we&#8217;ll deviate from the default options. This tutorial will ask you to index some sample data included with Solr, called the "techproducts" data. Let&#8217;s name our collection "techproducts" so it&#8217;s easy to differentiate from other collections we&#8217;ll create later. Enter <code>techproducts</code> at the prompt and hit <kbd>enter</kbd>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>How many shards would you like to split techproducts into? [2]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is asking how many <a href="solr-glossary.html#shard">shards</a> you want to split your index into across the two nodes. Choosing "2" (the default) means we will split the index relatively evenly across both nodes, which is a good way to start. Accept the default by hitting <kbd>enter</kbd>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>How many replicas per shard would you like to create? [2]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A replica is a copy of the index that&#8217;s used for failover (see also the <a href="solr-glossary.html#replica">Solr Glossary definition</a>). Again, the default of "2" is fine to start with here also, so accept the default by hitting <kbd>enter</kbd>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>Please choose a configuration for the techproducts collection, available options are:
+_default or sample_techproducts_configs [_default]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We&#8217;ve reached another point where we will deviate from the default option. Solr has two sample sets of configuration files (called a <em>configSet</em>) available out-of-the-box.</p>
+</div>
+<div class="paragraph">
+<p>A collection must have a configSet, which at a minimum includes the two main configuration files for Solr: the schema file (named either <code>managed-schema</code> or <code>schema.xml</code>), and <code>solrconfig.xml</code>. The question here is which configSet you would like to start with. The <code>_default</code> is a bare-bones option, but note there&#8217;s one whose name includes "techproducts", the same as we named our collection. This configSet is specifically designed to support the sample data we want to use, so enter <code>sample_techproducts_configs</code> at the prompt and hit <kbd>enter</kbd>.</p>
+</div>
+<div class="paragraph">
+<p>At this point, Solr will create the collection and again output to the screen the commands it issues.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>Uploading /solr-7.5.0/server/solr/configsets/_default/conf for config techproducts to ZooKeeper at localhost:9983
+
+Connecting to ZooKeeper at localhost:9983 ...
+INFO  - 2017-07-27 12:48:59.289; org.apache.solr.client.solrj.impl.ZkClientClusterStateProvider; Cluster at localhost:9983 ready
+Uploading /solr-7.5.0/server/solr/configsets/sample_techproducts_configs/conf for config techproducts to ZooKeeper at localhost:9983
+
+Creating new collection 'techproducts' using command:
+http://localhost:8983/solr/admin/collections?action=CREATE&amp;name=techproducts&amp;numShards=2&amp;replicationFactor=2&amp;maxShardsPerNode=2&amp;collection.configName=techproducts
+
+{
+  "responseHeader":{
+    "status":0,
+    "QTime":5460},
+  "success":{
+    "192.168.0.110:7574_solr":{
+      "responseHeader":{
+        "status":0,
+        "QTime":4056},
+      "core":"techproducts_shard1_replica_n1"},
+    "192.168.0.110:8983_solr":{
+      "responseHeader":{
+        "status":0,
+        "QTime":4056},
+      "core":"techproducts_shard2_replica_n2"}}}
+
+Enabling auto soft-commits with maxTime 3 secs using the Config API
+
+POSTing request to Config API: http://localhost:8983/solr/techproducts/config
+{"set-property":{"updateHandler.autoSoftCommit.maxTime":"3000"}}
+Successfully set-property updateHandler.autoSoftCommit.maxTime to 3000
+
+SolrCloud example running, please visit: http://localhost:8983/solr</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Congratulations!</strong> Solr is ready for data!</p>
+</div>
+<div class="paragraph">
+<p>You can see that Solr is running by launching the Solr Admin UI in your web browser: <a href="http://localhost:8983/solr/" class="bare">http://localhost:8983/solr/</a>. This is the main starting point for administering Solr.</p>
+</div>
+<div class="paragraph">
+<p>Solr will now be running two "nodes", one on port 7574 and one on port 8983. There is one collection created automatically, <code>techproducts</code>, a two shard collection, each with two replicas.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="http://localhost:8983/solr/#/~cloud">Cloud tab</a> in the Admin UI diagrams the collection nicely:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/solr-tutorial/tutorial-solrcloud.png" alt="tutorial solrcloud">
+</div>
+<div class="title">Figure 1. SolrCloud Diagram</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="index-the-techproducts-data">Index the Techproducts Data</h3>
+<div class="paragraph">
+<p>Your Solr server is up and running, but it doesn&#8217;t contain any data yet, so we can&#8217;t do any queries.</p>
+</div>
+<div class="paragraph">
+<p>Solr includes the <code>bin/post</code> tool in order to facilitate indexing various types of documents easily. We&#8217;ll use this tool for the indexing examples below.</p>
+</div>
+<div class="paragraph">
+<p>You&#8217;ll need a command shell to run some of the following examples, rooted in the Solr install directory; the shell from where you launched Solr works just fine.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Currently the <code>bin/post</code> tool does not have a comparable Windows script, but the underlying Java program invoked is available. We&#8217;ll show examples below for Windows, but you can also see the <a href="post-tool.html#post-tool-windows-support">Windows section</a> of the Post Tool documentation for more details.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The data we will index is in the <code>example/exampledocs</code> directory. The documents are in a mix of document formats (JSON, CSV, etc.), and fortunately we can index them all at once:</p>
+</div>
+<div class="listingblock">
+<div class="title">Linux/Mac</div>
+<div class="content">
+<pre class="pygments highlight"><code>solr-7.5.0:$ bin/post -c techproducts example/exampledocs/*</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Windows</div>
+<div class="content">
+<pre class="pygments highlight"><code>C:\solr-7.5.0&gt; java -jar -Dc=techproducts -Dauto example\exampledocs\post.jar example\exampledocs\*</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see output similar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>SimplePostTool version 5.0.0
+Posting files to [base] url http://localhost:8983/solr/techproducts/update...
+Entering auto mode. File endings considered are xml,json,jsonl,csv,pdf,doc,docx,ppt,pptx,xls,xlsx,odt,odp,ods,ott,otp,ots,rtf,htm,html,txt,log
+POSTing file books.csv (text/csv) to [base]
+POSTing file books.json (application/json) to [base]/json/docs
+POSTing file gb18030-example.xml (application/xml) to [base]
+POSTing file hd.xml (application/xml) to [base]
+POSTing file ipod_other.xml (application/xml) to [base]
+POSTing file ipod_video.xml (application/xml) to [base]
+POSTing file manufacturers.xml (application/xml) to [base]
+POSTing file mem.xml (application/xml) to [base]
+POSTing file money.xml (application/xml) to [base]
+POSTing file monitor.xml (application/xml) to [base]
+POSTing file monitor2.xml (application/xml) to [base]
+POSTing file more_books.jsonl (application/json) to [base]/json/docs
+POSTing file mp500.xml (application/xml) to [base]
+POSTing file post.jar (application/octet-stream) to [base]/extract
+POSTing file sample.html (text/html) to [base]/extract
+POSTing file sd500.xml (application/xml) to [base]
+POSTing file solr-word.pdf (application/pdf) to [base]/extract
+POSTing file solr.xml (application/xml) to [base]
+POSTing file test_utf8.sh (application/octet-stream) to [base]/extract
+POSTing file utf8-example.xml (application/xml) to [base]
+POSTing file vidcard.xml (application/xml) to [base]
+21 files indexed.
+COMMITting Solr index changes to http://localhost:8983/solr/techproducts/update...
+Time spent: 0:00:00.822</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Congratulations again! You have data in your Solr!</p>
+</div>
+<div class="paragraph">
+<p>Now we&#8217;re ready to start searching.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tutorial-searching">Basic Searching</h3>
+<div class="paragraph">
+<p>Solr can be queried via REST clients, curl, wget, Chrome POSTMAN, etc., as well as via native clients available for many programming languages.</p>
+</div>
+<div class="paragraph">
+<p>The Solr Admin UI includes a query builder interface via the Query tab for the <code>techproducts</code> collection (at <a href="http://localhost:8983/solr/#/techproducts/query" class="bare">http://localhost:8983/solr/#/techproducts/query</a>). If you click the <b class="button">Execute Query</b> button without changing anything in the form, you&#8217;ll get 10 documents in JSON format:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/solr-tutorial/tutorial-query-screen.png" alt="Solr Quick Start: techproducts Query screen with results">
+</div>
+<div class="title">Figure 2. Query Screen</div>
+</div>
+<div class="paragraph">
+<p>The URL sent by the Admin UI to Solr is shown in light grey near the top right of the above screenshot. If you click on it, your browser will show you the raw response.</p>
+</div>
+<div class="paragraph">
+<p>To use curl, give the same URL shown in your browser in quotes on the command line:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/techproducts/select?indent=on&amp;q=*:*"</code></p>
+</div>
+<div class="paragraph">
+<p>What&#8217;s happening here is that we are using Solr&#8217;s query parameter (<code>q</code>) with a special syntax that requests all documents in the index (<code>*:*</code>). All of the documents are not returned to us, however, because of the default for a parameter called <code>rows</code>, which you can see in the form is <code>10</code>. You can change the parameter in the UI or in the defaults if you wish.</p>
+</div>
+<div class="paragraph">
+<p>Solr has very powerful search options, and this tutorial won&#8217;t be able to cover all of them. But we can cover some of the most common types of queries.</p>
+</div>
+<div class="sect3">
+<h4 id="search-for-a-single-term">Search for a Single Term</h4>
+<div class="paragraph">
+<p>To search for a term, enter it as the <code>q</code> parameter value in the Solr Admin UI Query screen, replacing <code>*:*</code> with the term you want to find.</p>
+</div>
+<div class="paragraph">
+<p>Enter "foundation" and hit <b class="button">Execute Query</b> again.</p>
+</div>
+<div class="paragraph">
+<p>If you prefer curl, enter something like this:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/techproducts/select?q=foundation"</code></p>
+</div>
+<div class="paragraph">
+<p>You&#8217;ll see something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span>{
+  <span style="color: #008000; font-weight: bold">&quot;responseHeader&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;zkConnected&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+    <span style="color: #008000; font-weight: bold">&quot;status&quot;</span>:<span style="color: #666666">0</span>,
+    <span style="color: #008000; font-weight: bold">&quot;QTime&quot;</span>:<span style="color: #666666">8</span>,
+    <span style="color: #008000; font-weight: bold">&quot;params&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;q&quot;</span>:<span style="color: #BA2121">&quot;foundation&quot;</span>}},
+  <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{<span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">4</span>,<span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,<span style="color: #008000; font-weight: bold">&quot;maxScore&quot;</span>:<span style="color: #666666">2.7879646</span>,<span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #BA2121">&quot;0553293354&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;cat&quot;</span>:[<span style="color: #BA2121">&quot;book&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;name&quot;</span>:<span style="color: #BA2121">&quot;Foundation&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price&quot;</span>:<span style="color: #666666">7.99</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price_c&quot;</span>:<span style="color: #BA2121">&quot;7.99,USD&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;inStock&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+        <span style="color: #008000; font-weight: bold">&quot;author&quot;</span>:<span style="color: #BA2121">&quot;Isaac Asimov&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;author_s&quot;</span>:<span style="color: #BA2121">&quot;Isaac Asimov&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;series_t&quot;</span>:<span style="color: #BA2121">&quot;Foundation Novels&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;sequence_i&quot;</span>:<span style="color: #666666">1</span>,
+        <span style="color: #008000; font-weight: bold">&quot;genre_s&quot;</span>:<span style="color: #BA2121">&quot;scifi&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;_version_&quot;</span>:<span style="color: #666666">1574100232473411586</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price_c____l_ns&quot;</span>:<span style="color: #666666">799</span>}]
+}}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The response indicates that there are 4 hits (<code>"numFound":4</code>). We&#8217;ve only included one document the above sample output, but since 4 hits is lower than the <code>rows</code> parameter default of 10 to be returned, you should see all 4 of them.</p>
+</div>
+<div class="paragraph">
+<p>Note the <code>responseHeader</code> before the documents. This header will include the parameters you have set for the search. By default it shows only the parameters <em>you</em> have set for this query, which in this case is only your query term.</p>
+</div>
+<div class="paragraph">
+<p>The documents we got back include all the fields for each document that were indexed. This is, again, default behavior. If you want to restrict the fields in the response, you can use the <code>fl</code> param, which takes a comma-separated list of field names. This is one of the available fields on the query form in the Admin UI.</p>
+</div>
+<div class="paragraph">
+<p>Put "id" (without quotes) in the "fl" box and hit <b class="button">Execute Query</b> again. Or, to specify it with curl:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/techproducts/select?q=foundation&amp;fl=id"</code></p>
+</div>
+<div class="paragraph">
+<p>You should only see the IDs of the matching records returned.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="field-searches">Field Searches</h4>
+<div class="paragraph">
+<p>All Solr queries look for documents using some field. Often you want to query across multiple fields at the same time, and this is what we&#8217;ve done so far with the "foundation" query. This is possible with the use of copy fields, which are set up already with this set of configurations. We&#8217;ll cover copy fields a little bit more in Exercise 2.</p>
+</div>
+<div class="paragraph">
+<p>Sometimes, though, you want to limit your query to a single field. This can make your queries more efficient and the results more relevant for users.</p>
+</div>
+<div class="paragraph">
+<p>Much of the data in our small sample data set is related to products. Let&#8217;s say we want to find all the "electronics" products in the index. In the Query screen, enter "electronics" (without quotes) in the <code>q</code> box and hit <b class="button">Execute Query</b>. You should get 14 results, such as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span>{
+  <span style="color: #008000; font-weight: bold">&quot;responseHeader&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;zkConnected&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+    <span style="color: #008000; font-weight: bold">&quot;status&quot;</span>:<span style="color: #666666">0</span>,
+    <span style="color: #008000; font-weight: bold">&quot;QTime&quot;</span>:<span style="color: #666666">6</span>,
+    <span style="color: #008000; font-weight: bold">&quot;params&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;q&quot;</span>:<span style="color: #BA2121">&quot;electronics&quot;</span>}},
+  <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{<span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">14</span>,<span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,<span style="color: #008000; font-weight: bold">&quot;maxScore&quot;</span>:<span style="color: #666666">1.5579545</span>,<span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #BA2121">&quot;IW-02&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;name&quot;</span>:<span style="color: #BA2121">&quot;iPod &amp; iPod Mini USB 2.0 Cable&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manu&quot;</span>:<span style="color: #BA2121">&quot;Belkin&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manu_id_s&quot;</span>:<span style="color: #BA2121">&quot;belkin&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;cat&quot;</span>:[<span style="color: #BA2121">&quot;electronics&quot;</span>,
+          <span style="color: #BA2121">&quot;connector&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;features&quot;</span>:[<span style="color: #BA2121">&quot;car power adapter for iPod, white&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;weight&quot;</span>:<span style="color: #666666">2.0</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price&quot;</span>:<span style="color: #666666">11.5</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price_c&quot;</span>:<span style="color: #BA2121">&quot;11.50,USD&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;popularity&quot;</span>:<span style="color: #666666">1</span>,
+        <span style="color: #008000; font-weight: bold">&quot;inStock&quot;</span>:<span style="color: #008000; font-weight: bold">false</span>,
+        <span style="color: #008000; font-weight: bold">&quot;store&quot;</span>:<span style="color: #BA2121">&quot;37.7752,-122.4232&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manufacturedate_dt&quot;</span>:<span style="color: #BA2121">&quot;2006-02-14T23:55:59Z&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;_version_&quot;</span>:<span style="color: #666666">1574100232554151936</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price_c____l_ns&quot;</span>:<span style="color: #666666">1150</span>}]
+}}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This search finds all documents that contain the term "electronics" anywhere in the indexed fields. However, we can see from the above there is a <code>cat</code> field (for "category"). If we limit our search for only documents with the category "electronics", the results will be more precise for our users.</p>
+</div>
+<div class="paragraph">
+<p>Update your query in the <code>q</code> field of the Admin UI so it&#8217;s <code>cat:electronics</code>. Now you get 12 results:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span>{
+  <span style="color: #008000; font-weight: bold">&quot;responseHeader&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;zkConnected&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+    <span style="color: #008000; font-weight: bold">&quot;status&quot;</span>:<span style="color: #666666">0</span>,
+    <span style="color: #008000; font-weight: bold">&quot;QTime&quot;</span>:<span style="color: #666666">6</span>,
+    <span style="color: #008000; font-weight: bold">&quot;params&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;q&quot;</span>:<span style="color: #BA2121">&quot;cat:electronics&quot;</span>}},
+  <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{<span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">12</span>,<span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,<span style="color: #008000; font-weight: bold">&quot;maxScore&quot;</span>:<span style="color: #666666">0.9614112</span>,<span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #BA2121">&quot;SP2514N&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;name&quot;</span>:<span style="color: #BA2121">&quot;Samsung SpinPoint P120 SP2514N - hard drive - 250 GB - ATA-133&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manu&quot;</span>:<span style="color: #BA2121">&quot;Samsung Electronics Co. Ltd.&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manu_id_s&quot;</span>:<span style="color: #BA2121">&quot;samsung&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;cat&quot;</span>:[<span style="color: #BA2121">&quot;electronics&quot;</span>,
+          <span style="color: #BA2121">&quot;hard drive&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;features&quot;</span>:[<span style="color: #BA2121">&quot;7200RPM, 8MB cache, IDE Ultra ATA-133&quot;</span>,
+          <span style="color: #BA2121">&quot;NoiseGuard, SilentSeek technology, Fluid Dynamic Bearing (FDB) motor&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;price&quot;</span>:<span style="color: #666666">92.0</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price_c&quot;</span>:<span style="color: #BA2121">&quot;92.0,USD&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;popularity&quot;</span>:<span style="color: #666666">6</span>,
+        <span style="color: #008000; font-weight: bold">&quot;inStock&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manufacturedate_dt&quot;</span>:<span style="color: #BA2121">&quot;2006-02-13T15:26:37Z&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;store&quot;</span>:<span style="color: #BA2121">&quot;35.0752,-97.032&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;_version_&quot;</span>:<span style="color: #666666">1574100232511160320</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price_c____l_ns&quot;</span>:<span style="color: #666666">9200</span>}]
+     }}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using curl, this query would look like this:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/techproducts/select?q=cat:electronics"</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="phrase-search">Phrase Search</h4>
+<div class="paragraph">
+<p>To search for a multi-term phrase, enclose it in double quotes: <code>q="multiple terms here"</code>. For example, search for "CAS latency" by entering that phrase in quotes to the <code>q</code> box in the Admin UI.</p>
+</div>
+<div class="paragraph">
+<p>If you&#8217;re following along with curl, note that the space between terms must be converted to "+" in a URL, as so:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/techproducts/select?q=\"CAS+latency\""</code></p>
+</div>
+<div class="paragraph">
+<p>We get 2 results:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span>{
+  <span style="color: #008000; font-weight: bold">&quot;responseHeader&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;zkConnected&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+    <span style="color: #008000; font-weight: bold">&quot;status&quot;</span>:<span style="color: #666666">0</span>,
+    <span style="color: #008000; font-weight: bold">&quot;QTime&quot;</span>:<span style="color: #666666">7</span>,
+    <span style="color: #008000; font-weight: bold">&quot;params&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;q&quot;</span>:<span style="color: #BA2121">&quot;\&quot;CAS latency\&quot;&quot;</span>}},
+  <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{<span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">2</span>,<span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,<span style="color: #008000; font-weight: bold">&quot;maxScore&quot;</span>:<span style="color: #666666">5.937691</span>,<span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #BA2121">&quot;VDBDB1A16&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;name&quot;</span>:<span style="color: #BA2121">&quot;A-DATA V-Series 1GB 184-Pin DDR SDRAM Unbuffered DDR 400 (PC 3200) System Memory - OEM&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manu&quot;</span>:<span style="color: #BA2121">&quot;A-DATA Technology Inc.&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manu_id_s&quot;</span>:<span style="color: #BA2121">&quot;corsair&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;cat&quot;</span>:[<span style="color: #BA2121">&quot;electronics&quot;</span>,
+          <span style="color: #BA2121">&quot;memory&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;features&quot;</span>:[<span style="color: #BA2121">&quot;CAS latency 3,   2.7v&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;popularity&quot;</span>:<span style="color: #666666">0</span>,
+        <span style="color: #008000; font-weight: bold">&quot;inStock&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+        <span style="color: #008000; font-weight: bold">&quot;store&quot;</span>:<span style="color: #BA2121">&quot;45.18414,-93.88141&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manufacturedate_dt&quot;</span>:<span style="color: #BA2121">&quot;2006-02-13T15:26:37Z&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;payloads&quot;</span>:<span style="color: #BA2121">&quot;electronics|0.9 memory|0.1&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;_version_&quot;</span>:<span style="color: #666666">1574100232590852096</span>},
+      {
+        <span style="color: #008000; font-weight: bold">&quot;id&quot;</span>:<span style="color: #BA2121">&quot;TWINX2048-3200PRO&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;name&quot;</span>:<span style="color: #BA2121">&quot;CORSAIR  XMS 2GB (2 x 1GB) 184-Pin DDR SDRAM Unbuffered DDR 400 (PC 3200) Dual Channel Kit System Memory - Retail&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manu&quot;</span>:<span style="color: #BA2121">&quot;Corsair Microsystems Inc.&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manu_id_s&quot;</span>:<span style="color: #BA2121">&quot;corsair&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;cat&quot;</span>:[<span style="color: #BA2121">&quot;electronics&quot;</span>,
+          <span style="color: #BA2121">&quot;memory&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;features&quot;</span>:[<span style="color: #BA2121">&quot;CAS latency 2,  2-3-3-6 timing, 2.75v, unbuffered, heat-spreader&quot;</span>],
+        <span style="color: #008000; font-weight: bold">&quot;price&quot;</span>:<span style="color: #666666">185.0</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price_c&quot;</span>:<span style="color: #BA2121">&quot;185.00,USD&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;popularity&quot;</span>:<span style="color: #666666">5</span>,
+        <span style="color: #008000; font-weight: bold">&quot;inStock&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+        <span style="color: #008000; font-weight: bold">&quot;store&quot;</span>:<span style="color: #BA2121">&quot;37.7752,-122.4232&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;manufacturedate_dt&quot;</span>:<span style="color: #BA2121">&quot;2006-02-13T15:26:37Z&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;payloads&quot;</span>:<span style="color: #BA2121">&quot;electronics|6.0 memory|3.0&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;_version_&quot;</span>:<span style="color: #666666">1574100232584560640</span>,
+        <span style="color: #008000; font-weight: bold">&quot;price_c____l_ns&quot;</span>:<span style="color: #666666">18500</span>}]
+  }}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="combining-searches">Combining Searches</h4>
+<div class="paragraph">
+<p>By default, when you search for multiple terms and/or phrases in a single query, Solr will only require that one of them is present in order for a document to match. Documents containing more terms will be sorted higher in the results list.</p>
+</div>
+<div class="paragraph">
+<p>You can require that a term or phrase is present by prefixing it with a <code>+</code>; conversely, to disallow the presence of a term or phrase, prefix it with a <code>-</code>.</p>
+</div>
+<div class="paragraph">
+<p>To find documents that contain both terms "electronics" and "music", enter <code>+electronics +music</code> in the <code>q</code> box in the Admin UI Query tab.</p>
+</div>
+<div class="paragraph">
+<p>If you&#8217;re using curl, you must encode the <code>+</code> character because it has a reserved purpose in URLs (encoding the space character). The encoding for <code>+</code> is <code>%2B</code> as in:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/techproducts/select?q=%2Belectronics%20%2Bmusic"</code></p>
+</div>
+<div class="paragraph">
+<p>You should only get a single result.</p>
+</div>
+<div class="paragraph">
+<p>To search for documents that contain the term "electronics" but <strong>don&#8217;t</strong> contain the term "music", enter <code>+electronics -music</code> in the <code>q</code> box in the Admin UI. For curl, again, URL encode <code>+</code> as <code>%2B</code> as in:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/techproducts/select?q=%2Belectronics+-music"</code></p>
+</div>
+<div class="paragraph">
+<p>This time you get 13 results.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="more-information-on-searching">More Information on Searching</h4>
+<div class="paragraph">
+<p>We have only scratched the surface of the search options available in Solr. For more Solr search options, see the section on <a href="searching.html#searching">Searching</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="exercise-1-wrap-up">Exercise 1 Wrap Up</h3>
+<div class="paragraph">
+<p>At this point, you&#8217;ve seen how Solr can index data and have done some basic queries. You can choose now to continue to the next example which will introduce more Solr concepts, such as faceting results and managing your schema, or you can strike out on your own.</p>
+</div>
+<div class="paragraph">
+<p>If you decide not to continue with this tutorial, the data we&#8217;ve indexed so far is likely of little value to you. You can delete your installation and start over, or you can use the <code>bin/solr</code> script we started out with to delete this collection:</p>
+</div>
+<div class="paragraph">
+<p><code>bin/solr delete -c techproducts</code></p>
+</div>
+<div class="paragraph">
+<p>And then create a new collection:</p>
+</div>
+<div class="paragraph">
+<p><code>bin/solr create -c &lt;yourCollection&gt; -s 2 -rf 2</code></p>
+</div>
+<div class="paragraph">
+<p>To stop both of the Solr nodes we started, issue the command:</p>
+</div>
+<div class="paragraph">
+<p><code>bin/solr stop -all</code></p>
+</div>
+<div class="paragraph">
+<p>For more information on start/stop and collection options with <code>bin/solr</code>, see <a href="solr-control-script-reference.html#solr-control-script-reference">Solr Control Script Reference</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="exercise-2">Exercise 2: Modify the Schema and Index Films Data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This exercise will build on the last one and introduce you to the index schema and Solr&#8217;s powerful faceting features.</p>
+</div>
+<div class="sect2">
+<h3 id="restart-solr">Restart Solr</h3>
+<div class="paragraph">
+<p>Did you stop Solr after the last exercise? No? Then go ahead to the next section.</p>
+</div>
+<div class="paragraph">
+<p>If you did, though, and need to restart Solr, issue these commands:</p>
+</div>
+<div class="paragraph">
+<p><code>./bin/solr start -c -p 8983 -s example/cloud/node1/solr</code></p>
+</div>
+<div class="paragraph">
+<p>This starts the first node. When it&#8217;s done start the second node, and tell it how to connect to to ZooKeeper:</p>
+</div>
+<div class="paragraph">
+<p><code>./bin/solr start -c -p 7574 -s example/cloud/node2/solr -z localhost:9983</code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you have defined <code>ZK_HOST</code> in <code>solr.in.sh</code>/<code>solr.in.cmd</code> (see <a href="setting-up-an-external-zookeeper-ensemble.html#updating-solr-s-include-files">instructions</a>) you can omit <code>-z &lt;zk host string&gt;</code> from the above command.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="create-a-new-collection">Create a New Collection</h3>
+<div class="paragraph">
+<p>We&#8217;re going to use a whole new data set in this exercise, so it would be better to have a new collection instead of trying to reuse the one we had before.</p>
+</div>
+<div class="paragraph">
+<p>One reason for this is we&#8217;re going to use a feature in Solr called "field guessing", where Solr attempts to guess what type of data is in a field while it&#8217;s indexing it. It also automatically creates new fields in the schema for new fields that appear in incoming documents. This mode is called "Schemaless". We&#8217;ll see the benefits and limitations of this approach to help you decide how and where to use it in your real application.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">What is a "schema" and why do I need one?</div>
+<div class="paragraph">
+<p>Solr&#8217;s schema is a single file (in XML) that stores the details about the fields and field types Solr is expected to understand. The schema defines not only the field or field type names, but also any modifications that should happen to a field before it is indexed. For example, if you want to ensure that a user who enters "abc" and a user who enters "ABC" can both find a document containing the term "ABC", you will want to normalize (lower-case it, in this case) "ABC" when it is indexed, and normalize the user query to be sure of a match. These rules are defined in your schema.</p>
+</div>
+<div class="paragraph">
+<p>Earlier in the tutorial we mentioned copy fields, which are fields made up of data that originated from other fields. You can also define dynamic fields, which use wildcards (such as <code>*_t</code> or <code>*_s</code>) to dynamically create fields of a specific field type. These types of rules are also defined in the schema.</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>When you initially started Solr in the first exercise, we had a choice of a configSet to use. The one we chose had a schema that was pre-defined for the data we later indexed. This time, we&#8217;re going to use a configSet that has a very minimal schema and let Solr figure out from the data what fields to add.</p>
+</div>
+<div class="paragraph">
+<p>The data you&#8217;re going to index is related to movies, so start by creating a collection named "films" that uses the <code>_default</code> configSet:</p>
+</div>
+<div class="paragraph">
+<p><code>bin/solr create -c films -s 2 -rf 2</code></p>
+</div>
+<div class="paragraph">
+<p>Whoa, wait. We didn&#8217;t specify a configSet! That&#8217;s fine, the <code>_default</code> is appropriately named, since it&#8217;s the default and is used if you don&#8217;t specify one at all.</p>
+</div>
+<div class="paragraph">
+<p>We did, however, set two parameters <code>-s</code> and <code>-rf</code>. Those are the number of shards to split the collection across (2) and how many replicas to create (2). This is equivalent to the options we had during the interactive example from the first exercise.</p>
+</div>
+<div class="paragraph">
+<p>You should see output like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code>WARNING: Using _default configset. Data driven schema functionality is enabled by default, which is
+         NOT RECOMMENDED for production use.
+
+         To turn it off:
+            bin/solr config -c films -p 7574 -action set-user-property -property update.autoCreateFields -value false
+
+Connecting to ZooKeeper at localhost:9983 ...
+INFO  - 2017-07-27 15:07:46.191; org.apache.solr.client.solrj.impl.ZkClientClusterStateProvider; Cluster at localhost:9983 ready
+Uploading /7.5.0/server/solr/configsets/_default/conf for config films to ZooKeeper at localhost:9983
+
+Creating new collection 'films' using command:
+http://localhost:7574/solr/admin/collections?action=CREATE&amp;name=films&amp;numShards=2&amp;replicationFactor=2&amp;maxShardsPerNode=2&amp;collection.configName=films
+
+{
+  "responseHeader":{
+    "status":0,
+    "QTime":3830},
+  "success":{
+    "192.168.0.110:8983_solr":{
+      "responseHeader":{
+        "status":0,
+        "QTime":2076},
+      "core":"films_shard2_replica_n1"},
+    "192.168.0.110:7574_solr":{
+      "responseHeader":{
+        "status":0,
+        "QTime":2494},
+      "core":"films_shard1_replica_n2"}}}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The first thing the command printed was a warning about not using this configSet in production. That&#8217;s due to some of the limitations we&#8217;ll cover shortly.</p>
+</div>
+<div class="paragraph">
+<p>Otherwise, though, the collection should be created. If we go to the Admin UI at <a href="http://localhost:8983/solr/#/films/collection-overview" class="bare">http://localhost:8983/solr/#/films/collection-overview</a> we should see the overview screen.</p>
+</div>
+<div class="sect3">
+<h4 id="preparing-schemaless-for-the-films-data">Preparing Schemaless for the Films Data</h4>
+<div class="paragraph">
+<p>There are two parallel things happening with the schema that comes with the <code>_default</code> configSet.</p>
+</div>
+<div class="paragraph">
+<p>First, we are using a "managed schema", which is configured to only be modified by Solr&#8217;s Schema API. That means we should not hand-edit it so there isn&#8217;t confusion about which edits come from which source. Solr&#8217;s Schema API allows us to make changes to fields, field types, and other types of schema rules.</p>
+</div>
+<div class="paragraph">
+<p>Second, we are using "field guessing", which is configured in the <code>solrconfig.xml</code> file (and includes most of Solr&#8217;s various configuration settings). Field guessing is designed to allow us to start using Solr without having to define all the fields we think will be in our documents before trying to index them. This is why we call it "schemaless", because you can start quickly and let Solr create fields for you as it encounters them in documents.</p>
+</div>
+<div class="paragraph">
+<p>Sounds great! Well, not really, there are limitations. It&#8217;s a bit brute force, and if it guesses wrong, you can&#8217;t change much about a field after data has been indexed without having to reindex. If we only have a few thousand documents that might not be bad, but if you have millions and millions of documents, or, worse, don&#8217;t have access to the original data anymore, this can be a real problem.</p>
+</div>
+<div class="paragraph">
+<p>For these reasons, the Solr community does not recommend going to production without a schema that you have defined yourself. By this we mean that the schemaless features are fine to start with, but you should still always make sure your schema matches your expectations for how you want your data indexed and how users are going to query it.</p>
+</div>
+<div class="paragraph">
+<p>It is possible to mix schemaless features with a defined schema. Using the Schema API, you can define a few fields that you know you want to control, and let Solr guess others that are less important or which you are confident (through testing) will be guessed to your satisfaction. That&#8217;s what we&#8217;re going to do here.</p>
+</div>
+<div class="sect4">
+<h5 id="create-the-names-field">Create the "names" Field</h5>
+<div class="paragraph">
+<p>The films data we are going to index has a small number of fields for each movie: an ID, director name(s), film name, release date, and genre(s).</p>
+</div>
+<div class="paragraph">
+<p>If you look at one of the files in <code>example/films</code>, you&#8217;ll see the first film is named <em>.45</em>, released in 2006. As the first document in the dataset, Solr is going to guess the field type based on the data in the record. If we go ahead and index this data, that first film name is going to indicate to Solr that that field type is a "float" numeric field, and will create a "name" field with a type <code>FloatPointField</code>. All data after this record will be expected to be a float.</p>
+</div>
+<div class="paragraph">
+<p>Well, that&#8217;s not going to work. We have titles like <em>A Mighty Wind</em> and <em>Chicken Run</em>, which are strings - decidedly not numeric and not floats. If we let Solr guess the "name" field is a float, what will happen is later titles will cause an error and indexing will fail. That&#8217;s not going to get us very far.</p>
+</div>
+<div class="paragraph">
+<p>What we can do is set up the "name" field in Solr before we index the data to be sure Solr always interprets it as a string. At the command line, enter this curl command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>curl -X POST -H <span style="color: #BA2121">&#39;Content-type:application/json&#39;</span> --data-binary <span style="color: #BA2121">&#39;{&quot;add-field&quot;: {&quot;name&quot;:&quot;name&quot;, &quot;type&quot;:&quot;text_general&quot;, &quot;multiValued&quot;:false, &quot;stored&quot;:true}}&#39;</span> http://localhost:8983/solr/films/schema</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command uses the Schema API to explicitly define a field named "name" that has the field type "text_general" (a text field). It will not be permitted to have multiple values, but it will be stored (meaning it can be retrieved by queries).</p>
+</div>
+<div class="paragraph">
+<p>You can also use the Admin UI to create fields, but it offers a bit less control over the properties of your field. It will work for our case, though:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/solr-tutorial/tutorial-add-field.png" alt="Adding a Field" width="640" height="480">
+</div>
+<div class="title">Figure 3. Creating a field</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="create-a-catchall-copy-field">Create a "catchall" Copy Field</h5>
+<div class="paragraph">
+<p>There&#8217;s one more change to make before we start indexing.</p>
+</div>
+<div class="paragraph">
+<p>In the first exercise when we queried the documents we had indexed, we didn&#8217;t have to specify a field to search because the configuration we used was set up to copy fields into a <code>text</code> field, and that field was the default when no other field was defined in the query.</p>
+</div>
+<div class="paragraph">
+<p>The configuration we&#8217;re using now doesn&#8217;t have that rule. We would need to define a field to search for every query. We can, however, set up a "catchall field" by defining a copy field that will take all data from all fields and index it into a field named <code>_text_</code>. Let&#8217;s do that now.</p>
+</div>
+<div class="paragraph">
+<p>You can use either the Admin UI or the Schema API for this.</p>
+</div>
+<div class="paragraph">
+<p>At the command line, use the Schema API again to define a copy field:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>curl -X POST -H <span style="color: #BA2121">&#39;Content-type:application/json&#39;</span> --data-binary <span style="color: #BA2121">&#39;{&quot;add-copy-field&quot; : {&quot;source&quot;:&quot;*&quot;,&quot;dest&quot;:&quot;_text_&quot;}}&#39;</span> http://localhost:8983/solr/films/schema</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the Admin UI, choose <b class="button">Add Copy Field</b>, then fill out the source and destination for your field, as in this screenshot.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/solr-tutorial/tutorial-add-copy-field.png" alt="Adding a copy field" width="640" height="480">
+</div>
+<div class="title">Figure 4. Creating a copy field</div>
+</div>
+<div class="paragraph">
+<p>What this does is make a copy of all fields and put the data into the "_text_" field.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+It can be very expensive to do this with your production data because it tells Solr to effectively index everything twice. It will make indexing slower, and make your index larger. With your production data, you will want to be sure you only copy fields that really warrant it for your application.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>OK, now we&#8217;re ready to index the data and start playing around with it.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="index-sample-film-data">Index Sample Film Data</h3>
+<div class="paragraph">
+<p>The films data we will index is located in the <code>example/films</code> directory of your installation. It comes in three formats: JSON, XML and CSV. Pick one of the formats and index it into the "films" collection (in each example, one command is for Unix/MacOS and the other is for Windows):</p>
+</div>
+<div class="listingblock">
+<div class="title">To Index JSON Format</div>
+<div class="content">
+<pre class="pygments highlight"><code>bin/post -c films example/films/films.json
+
+C:\solr-7.5.0&gt; java -jar -Dc=films -Dauto example\exampledocs\post.jar example\films\*.json</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">To Index XML Format</div>
+<div class="content">
+<pre class="pygments highlight"><code>bin/post -c films example/films/films.xml
+
+C:\solr-7.5.0&gt; java -jar -Dc=films -Dauto example\exampledocs\post.jar example\films\*.xml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">To Index CSV Format</div>
+<div class="content">
+<pre class="pygments highlight"><code>bin/post -c films example/films/films.csv -params "f.genre.split=true&amp;f.directed_by.split=true&amp;f.genre.separator=|&amp;f.directed_by.separator=|"
+
+C:\solr-7.5.0&gt; java -jar -Dc=films -Dparams=f.genre.split=true&amp;f.directed_by.split=true&amp;f.genre.separator=|&amp;f.directed_by.separator=| -Dauto example\exampledocs\post.jar example\films\*.csv</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each command includes these main parameters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>-c films</code>: this is the Solr collection to index data to.</p>
+</li>
+<li>
+<p><code>example/films/films.json</code> (or <code>films.xml</code> or <code>films.csv</code>): this is the path to the data file to index. You could simply supply the directory where this file resides, but since you know the format you want to index, specifying the exact file for that format is more efficient.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note the CSV command includes extra parameters. This is to ensure multi-valued entries in the "genre" and "directed_by" columns are split by the pipe (<code>|</code>) character, used in this file as a separator. Telling Solr to split these columns this way will ensure proper indexing of the data.</p>
+</div>
+<div class="paragraph">
+<p>Each command will produce output similar to the below seen while indexing JSON:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>$ ./bin/post -c films example/films/films.json
+/bin/java -classpath /solr-<span style="color: #666666">{</span>solr-docs-version<span style="color: #666666">}</span>.0/dist/solr-core-<span style="color: #666666">{</span>solr-docs-version<span style="color: #666666">}</span>.0.jar -Dauto<span style="color: #666666">=</span>yes -Dc<span style="color: #666666">=</span>films -Ddata<span style="color: #666666">=</span>files org.apache.solr.util.SimplePostTool example/films/films.json
+SimplePostTool version <span style="color: #666666">5</span>.0.0
+Posting files to <span style="color: #666666">[</span>base<span style="color: #666666">]</span> url http://localhost:8983/solr/films/update...
+Entering auto mode. File endings considered are xml,json,jsonl,csv,pdf,doc,docx,ppt,pptx,xls,xlsx,odt,odp,ods,ott,otp,ots,rtf,htm,html,txt,log
+POSTing file films.json <span style="color: #666666">(</span>application/json<span style="color: #666666">)</span> to <span style="color: #666666">[</span>base<span style="color: #666666">]</span>/json/docs
+<span style="color: #666666">1</span> files indexed.
+COMMITting Solr index changes to http://localhost:8983/solr/films/update...
+Time spent: <span style="color: #666666">0</span>:00:00.878</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Hooray!</p>
+</div>
+<div class="paragraph">
+<p>If you go to the Query screen in the Admin UI for films (<a href="http://localhost:8983/solr/#/films/query" class="bare">http://localhost:8983/solr/#/films/query</a>) and hit <b class="button">Execute Query</b> you should see 1100 results, with the first 10 returned to the screen.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s do a query to see if the "catchall" field worked properly. Enter "comedy" in the <code>q</code> box and hit <b class="button">Execute Query</b> again. You should see get 417 results. Feel free to play around with other searches before we move on to faceting.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="tutorial-faceting">Faceting</h3>
+<div class="paragraph">
+<p>One of Solr&#8217;s most popular features is faceting. Faceting allows the search results to be arranged into subsets (or buckets, or categories), providing a count for each subset. There are several types of faceting: field values, numeric and date ranges, pivots (decision tree), and arbitrary query faceting.</p>
+</div>
+<div class="sect3">
+<h4 id="field-facets">Field Facets</h4>
+<div class="paragraph">
+<p>In addition to providing search results, a Solr query can return the number of documents that contain each unique value in the whole result set.</p>
+</div>
+<div class="paragraph">
+<p>On the Admin UI Query tab, if you check the <code>facet</code> checkbox, you&#8217;ll see a few facet-related options appear:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/solr-tutorial/tutorial-admin-ui-facet-options.png" alt="Solr Quick Start: Query tab facet options">
+</div>
+<div class="title">Figure 5. Facet options in the Query screen</div>
+</div>
+<div class="paragraph">
+<p>To see facet counts from all documents (<code>q=*:*</code>): turn on faceting (<code>facet=true</code>), and specify the field to facet on via the <code>facet.field</code> param. If you only want facets, and no document contents, specify <code>rows=0</code>. The <code>curl</code> command below will return facet counts for the <code>genre_str</code> field:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/films/select?q=*:*&amp;rows=0&amp;facet=true&amp;facet.field=genre_str"</code></p>
+</div>
+<div class="paragraph">
+<p>In your terminal, you&#8217;ll see something like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span>{
+  <span style="color: #008000; font-weight: bold">&quot;responseHeader&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;zkConnected&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+    <span style="color: #008000; font-weight: bold">&quot;status&quot;</span>:<span style="color: #666666">0</span>,
+    <span style="color: #008000; font-weight: bold">&quot;QTime&quot;</span>:<span style="color: #666666">11</span>,
+    <span style="color: #008000; font-weight: bold">&quot;params&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;q&quot;</span>:<span style="color: #BA2121">&quot;*:*&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;facet.field&quot;</span>:<span style="color: #BA2121">&quot;genre_str&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;rows&quot;</span>:<span style="color: #BA2121">&quot;0&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;facet&quot;</span>:<span style="color: #BA2121">&quot;true&quot;</span>}},
+  <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{<span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">1100</span>,<span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,<span style="color: #008000; font-weight: bold">&quot;maxScore&quot;</span>:<span style="color: #666666">1.0</span>,<span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[]
+  },
+  <span style="color: #008000; font-weight: bold">&quot;facet_counts&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;facet_queries&quot;</span>:{},
+    <span style="color: #008000; font-weight: bold">&quot;facet_fields&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;genre_str&quot;</span>:[
+        <span style="color: #BA2121">&quot;Drama&quot;</span>,<span style="color: #666666">552</span>,
+        <span style="color: #BA2121">&quot;Comedy&quot;</span>,<span style="color: #666666">389</span>,
+        <span style="color: #BA2121">&quot;Romance Film&quot;</span>,<span style="color: #666666">270</span>,
+        <span style="color: #BA2121">&quot;Thriller&quot;</span>,<span style="color: #666666">259</span>,
+        <span style="color: #BA2121">&quot;Action Film&quot;</span>,<span style="color: #666666">196</span>,
+        <span style="color: #BA2121">&quot;Crime Fiction&quot;</span>,<span style="color: #666666">170</span>,
+        <span style="color: #BA2121">&quot;World cinema&quot;</span>,<span style="color: #666666">167</span>]},
+        <span style="color: #008000; font-weight: bold">&quot;facet_ranges&quot;</span>:{},
+        <span style="color: #008000; font-weight: bold">&quot;facet_intervals&quot;</span>:{},
+        <span style="color: #008000; font-weight: bold">&quot;facet_heatmaps&quot;</span>:{}}}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We&#8217;ve truncated the output here a little bit, but in the <code>facet_counts</code> section, you see by default you get a count of the number of documents using each genre for every genre in the index. Solr has a parameter <code>facet.mincount</code> that you could use to limit the facets to only those that contain a certain number of documents (this parameter is not shown in the UI). Or, perhaps you do want all the facets, and you&#8217;ll let your application&#8217;s front-end control how it&#8217;s displayed to users.</p>
+</div>
+<div class="paragraph">
+<p>If you wanted to control the number of items in a bucket, you could do something like this:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/films/select?=&amp;q=*:*&amp;facet.field=genre_str&amp;facet.mincount=200&amp;facet=on&amp;rows=0"</code></p>
+</div>
+<div class="paragraph">
+<p>You should only see 4 facets returned.</p>
+</div>
+<div class="paragraph">
+<p>There are a great deal of other parameters available to help you control how Solr constructs the facets and facet lists. We&#8217;ll cover some of them in this exercise, but you can also see the section <a href="faceting.html#faceting">Faceting</a> for more detail.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="range-facets">Range Facets</h4>
+<div class="paragraph">
+<p>For numerics or dates, it&#8217;s often desirable to partition the facet counts into ranges rather than discrete values. A prime example of numeric range faceting, using the example techproducts data from our previous exercise, is <code>price</code>.  In the <code>/browse</code> UI, it looks like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/solr-tutorial/tutorial-range-facet.png" alt="Solr Quick Start: Range facets">
+</div>
+<div class="title">Figure 6. Range facets</div>
+</div>
+<div class="paragraph">
+<p>The films data includes the release date for films, and we could use that to create date range facets, which are another common use for range facets.</p>
+</div>
+<div class="paragraph">
+<p>The Solr Admin UI doesn&#8217;t yet support range facet options, so you will need to use curl or similar command line tool for the following examples.</p>
+</div>
+<div class="paragraph">
+<p>If we construct a query that looks like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>curl <span style="color: #BA2121">&#39;http://localhost:8983/solr/films/select?q=*:*&amp;rows=0&#39;</span><span style="color: #BB6622; font-weight: bold">\</span>
+    <span style="color: #BA2121">&#39;&amp;facet=true&#39;</span><span style="color: #BB6622; font-weight: bold">\</span>
+    <span style="color: #BA2121">&#39;&amp;facet.range=initial_release_date&#39;</span><span style="color: #BB6622; font-weight: bold">\</span>
+    <span style="color: #BA2121">&#39;&amp;facet.range.start=NOW-20YEAR&#39;</span><span style="color: #BB6622; font-weight: bold">\</span>
+    <span style="color: #BA2121">&#39;&amp;facet.range.end=NOW&#39;</span><span style="color: #BB6622; font-weight: bold">\</span>
+    <span style="color: #BA2121">&#39;&amp;facet.range.gap=%2B1YEAR&#39;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will request all films and ask for them to be grouped by year starting with 20 years ago (our earliest release date is in 2000) and ending today. Note that this query again URL encodes a <code>+</code> as <code>%2B</code>.</p>
+</div>
+<div class="paragraph">
+<p>In the terminal you will see:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span>{
+  <span style="color: #008000; font-weight: bold">&quot;responseHeader&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;zkConnected&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+    <span style="color: #008000; font-weight: bold">&quot;status&quot;</span>:<span style="color: #666666">0</span>,
+    <span style="color: #008000; font-weight: bold">&quot;QTime&quot;</span>:<span style="color: #666666">8</span>,
+    <span style="color: #008000; font-weight: bold">&quot;params&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;facet.range&quot;</span>:<span style="color: #BA2121">&quot;initial_release_date&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;facet.limit&quot;</span>:<span style="color: #BA2121">&quot;300&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;q&quot;</span>:<span style="color: #BA2121">&quot;*:*&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;facet.range.gap&quot;</span>:<span style="color: #BA2121">&quot;+1YEAR&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;rows&quot;</span>:<span style="color: #BA2121">&quot;0&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;facet&quot;</span>:<span style="color: #BA2121">&quot;on&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;facet.range.start&quot;</span>:<span style="color: #BA2121">&quot;NOW-20YEAR&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;facet.range.end&quot;</span>:<span style="color: #BA2121">&quot;NOW&quot;</span>}},
+  <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{<span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">1100</span>,<span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,<span style="color: #008000; font-weight: bold">&quot;maxScore&quot;</span>:<span style="color: #666666">1.0</span>,<span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[]
+  },
+  <span style="color: #008000; font-weight: bold">&quot;facet_counts&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;facet_queries&quot;</span>:{},
+    <span style="color: #008000; font-weight: bold">&quot;facet_fields&quot;</span>:{},
+    <span style="color: #008000; font-weight: bold">&quot;facet_ranges&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;initial_release_date&quot;</span>:{
+        <span style="color: #008000; font-weight: bold">&quot;counts&quot;</span>:[
+          <span style="color: #BA2121">&quot;1997-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">0</span>,
+          <span style="color: #BA2121">&quot;1998-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">0</span>,
+          <span style="color: #BA2121">&quot;1999-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">48</span>,
+          <span style="color: #BA2121">&quot;2000-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">82</span>,
+          <span style="color: #BA2121">&quot;2001-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">103</span>,
+          <span style="color: #BA2121">&quot;2002-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">131</span>,
+          <span style="color: #BA2121">&quot;2003-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">137</span>,
+          <span style="color: #BA2121">&quot;2004-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">163</span>,
+          <span style="color: #BA2121">&quot;2005-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">189</span>,
+          <span style="color: #BA2121">&quot;2006-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">92</span>,
+          <span style="color: #BA2121">&quot;2007-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">26</span>,
+          <span style="color: #BA2121">&quot;2008-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">7</span>,
+          <span style="color: #BA2121">&quot;2009-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">3</span>,
+          <span style="color: #BA2121">&quot;2010-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">0</span>,
+          <span style="color: #BA2121">&quot;2011-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">0</span>,
+          <span style="color: #BA2121">&quot;2012-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">1</span>,
+          <span style="color: #BA2121">&quot;2013-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">1</span>,
+          <span style="color: #BA2121">&quot;2014-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">1</span>,
+          <span style="color: #BA2121">&quot;2015-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">0</span>,
+          <span style="color: #BA2121">&quot;2016-07-28T17:12:06.919Z&quot;</span>,<span style="color: #666666">0</span>],
+        <span style="color: #008000; font-weight: bold">&quot;gap&quot;</span>:<span style="color: #BA2121">&quot;+1YEAR&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #BA2121">&quot;1997-07-28T17:12:06.919Z&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;end&quot;</span>:<span style="color: #BA2121">&quot;2017-07-28T17:12:06.919Z&quot;</span>}},
+    <span style="color: #008000; font-weight: bold">&quot;facet_intervals&quot;</span>:{},
+    <span style="color: #008000; font-weight: bold">&quot;facet_heatmaps&quot;</span>:{}}}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="pivot-facets">Pivot Facets</h4>
+<div class="paragraph">
+<p>Another faceting type is pivot facets, also known as "decision trees", allowing two or more fields to be nested for all the various possible combinations. Using the films data, pivot facets can be used to see how many of the films in the "Drama" category (the <code>genre_str</code> field) are directed by a director. Here&#8217;s how to get at the raw data for this scenario:</p>
+</div>
+<div class="paragraph">
+<p><code>curl "http://localhost:8983/solr/films/select?q=*:*&amp;rows=0&amp;facet=on&amp;facet.pivot=genre_str,directed_by_str"</code></p>
+</div>
+<div class="paragraph">
+<p>This results in the following response, which shows a facet for each category and director combination:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="json"><span></span>{<span style="color: #008000; font-weight: bold">&quot;responseHeader&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;zkConnected&quot;</span>:<span style="color: #008000; font-weight: bold">true</span>,
+    <span style="color: #008000; font-weight: bold">&quot;status&quot;</span>:<span style="color: #666666">0</span>,
+    <span style="color: #008000; font-weight: bold">&quot;QTime&quot;</span>:<span style="color: #666666">1147</span>,
+    <span style="color: #008000; font-weight: bold">&quot;params&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;q&quot;</span>:<span style="color: #BA2121">&quot;*:*&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;facet.pivot&quot;</span>:<span style="color: #BA2121">&quot;genre_str,directed_by_str&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;rows&quot;</span>:<span style="color: #BA2121">&quot;0&quot;</span>,
+      <span style="color: #008000; font-weight: bold">&quot;facet&quot;</span>:<span style="color: #BA2121">&quot;on&quot;</span>}},
+  <span style="color: #008000; font-weight: bold">&quot;response&quot;</span>:{<span style="color: #008000; font-weight: bold">&quot;numFound&quot;</span>:<span style="color: #666666">1100</span>,<span style="color: #008000; font-weight: bold">&quot;start&quot;</span>:<span style="color: #666666">0</span>,<span style="color: #008000; font-weight: bold">&quot;maxScore&quot;</span>:<span style="color: #666666">1.0</span>,<span style="color: #008000; font-weight: bold">&quot;docs&quot;</span>:[]
+  },
+  <span style="color: #008000; font-weight: bold">&quot;facet_counts&quot;</span>:{
+    <span style="color: #008000; font-weight: bold">&quot;facet_queries&quot;</span>:{},
+    <span style="color: #008000; font-weight: bold">&quot;facet_fields&quot;</span>:{},
+    <span style="color: #008000; font-weight: bold">&quot;facet_ranges&quot;</span>:{},
+    <span style="color: #008000; font-weight: bold">&quot;facet_intervals&quot;</span>:{},
+    <span style="color: #008000; font-weight: bold">&quot;facet_heatmaps&quot;</span>:{},
+    <span style="color: #008000; font-weight: bold">&quot;facet_pivot&quot;</span>:{
+      <span style="color: #008000; font-weight: bold">&quot;genre_str,directed_by_str&quot;</span>:[{
+          <span style="color: #008000; font-weight: bold">&quot;field&quot;</span>:<span style="color: #BA2121">&quot;genre_str&quot;</span>,
+          <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>:<span style="color: #BA2121">&quot;Drama&quot;</span>,
+          <span style="color: #008000; font-weight: bold">&quot;count&quot;</span>:<span style="color: #666666">552</span>,
+          <span style="color: #008000; font-weight: bold">&quot;pivot&quot;</span>:[{
+              <span style="color: #008000; font-weight: bold">&quot;field&quot;</span>:<span style="color: #BA2121">&quot;directed_by_str&quot;</span>,
+              <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>:<span style="color: #BA2121">&quot;Ridley Scott&quot;</span>,
+              <span style="color: #008000; font-weight: bold">&quot;count&quot;</span>:<span style="color: #666666">5</span>},
+            {
+              <span style="color: #008000; font-weight: bold">&quot;field&quot;</span>:<span style="color: #BA2121">&quot;directed_by_str&quot;</span>,
+              <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>:<span style="color: #BA2121">&quot;Steven Soderbergh&quot;</span>,
+              <span style="color: #008000; font-weight: bold">&quot;count&quot;</span>:<span style="color: #666666">5</span>},
+            {
+              <span style="color: #008000; font-weight: bold">&quot;field&quot;</span>:<span style="color: #BA2121">&quot;directed_by_str&quot;</span>,
+              <span style="color: #008000; font-weight: bold">&quot;value&quot;</span>:<span style="color: #BA2121">&quot;Michael Winterbottom&quot;</span>,
+              <span style="color: #008000; font-weight: bold">&quot;count&quot;</span>:<span style="color: #666666">4</span>}<span style="border: 1px solid #FF0000">}</span>]}]}}}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We&#8217;ve truncated this output as well - you will see a lot of genres and directors in your screen.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="exercise-2-wrap-up">Exercise 2 Wrap Up</h3>
+<div class="paragraph">
+<p>In this exercise, we learned a little bit more about how Solr organizes data in the indexes, and how to work with the Schema API to manipulate the schema file. We also learned a bit about facets in Solr, including range facets and pivot facets. In both of these things, we&#8217;ve only scratched the surface of the available options. If you can dream it, it might be possible!</p>
+</div>
+<div class="paragraph">
+<p>Like our previous exercise, this data may not be relevant to your needs. We can clean up our work by deleting the collection. To do that, issue this command at the command line:</p>
+</div>
+<div class="paragraph">
+<p><code>bin/solr delete -c films</code></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="exercise-3">Exercise 3: Index Your Own Data</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For this last exercise, work with a dataset of your choice. This can be files on your local hard drive, a set of data you have worked with before, or maybe a sample of the data you intend to index to Solr for your production application.</p>
+</div>
+<div class="paragraph">
+<p>This exercise is intended to get you thinking about what you will need to do for your application:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>What sorts of data do you need to index?</p>
+</li>
+<li>
+<p>What will you need to do to prepare Solr for your data (such as, create specific fields, set up copy fields, determine analysis rules, etc.)</p>
+</li>
+<li>
+<p>What kinds of search options do you want to provide to users?</p>
+</li>
+<li>
+<p>How much testing will you need to do to ensure everything works the way you expect?</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="create-your-own-collection">Create Your Own Collection</h3>
+<div class="paragraph">
+<p>Before you get started, create a new collection, named whatever you&#8217;d like. In this example, the collection will be named "localDocs"; replace that name with whatever name you choose if you want to.</p>
+</div>
+<div class="paragraph">
+<p><code>./bin/solr create -c localDocs -s 2 -rf 2</code></p>
+</div>
+<div class="paragraph">
+<p>Again, as we saw from Exercise 2 above, this will use the <code>_default</code> configSet and all the schemaless features it provides. As we noted previously, this may cause problems when we index our data. You may need to iterate on indexing a few times before you get the schema right.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="indexing-ideas">Indexing Ideas</h3>
+<div class="paragraph">
+<p>Solr has lots of ways to index data. Choose one of the approaches below and try it out with your system:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Local Files with bin/post</dt>
+<dd>
+<p>If you have a local directory of files, the Post Tool (<code>bin/post</code>) can index a directory of files. We saw this in action in our first exercise.</p>
+<div class="paragraph">
+<p>We used only JSON, XML and CSV in our exercises, but the Post Tool can also handle HTML, PDF, Microsoft Office formats (such as MS Word), plain text, and more.</p>
+</div>
+<div class="paragraph">
+<p>In this example, assume there is a directory named "Documents" locally. To index it, we would issue a command like this (correcting the collection name after the <code>-c</code> parameter as needed):</p>
+</div>
+<div class="paragraph">
+<p><code>./bin/post -c localDocs ~/Documents</code></p>
+</div>
+<div class="paragraph">
+<p>You may get errors as it works through your documents. These might be caused by the field guessing, or the file type may not be supported. Indexing content such as this demonstrates the need to plan Solr for your data, which requires understanding it and perhaps also some trial and error.</p>
+</div>
+</dd>
+<dt class="hdlist1">DataImportHandler</dt>
+<dd>
+<p>Solr includes a tool called the <a href="uploading-structured-data-store-data-with-the-data-import-handler.html#uploading-structured-data-store-data-with-the-data-import-handler">Data Import Handler (DIH)</a> which can connect to databases (if you have a jdbc driver), mail servers, or other structured data sources. There are several examples included for feeds, GMail, and a small HSQL database.</p>
+<div class="paragraph">
+<p>The <code>README.txt</code> file in <code>example/example-DIH</code> will give you details on how to start working with this tool.</p>
+</div>
+</dd>
+<dt class="hdlist1">SolrJ</dt>
+<dd>
+<p>SolrJ is a Java-based client for interacting with Solr. Use <a href="using-solrj.html#using-solrj">SolrJ</a> for JVM-based languages or other <a href="client-apis.html#client-apis">Solr clients</a> to programmatically create documents to send to Solr.</p>
+</dd>
+<dt class="hdlist1">Documents Screen</dt>
+<dd>
+<p>Use the Admin UI <a href="documents-screen.html#documents-screen">Documents tab</a> (at <a href="http://localhost:8983/solr/#/localDocs/documents" class="bare">http://localhost:8983/solr/#/localDocs/documents</a>) to paste in a document to be indexed, or select <code>Document Builder</code> from the <code>Document Type</code> dropdown to build a document one field at a time. Click on the <b class="button">Submit Document</b> button below the form to index your document.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="updating-data">Updating Data</h3>
+<div class="paragraph">
+<p>You may notice that even if you index content in this tutorial more than once, it does not duplicate the results found. This is because the example Solr schema (a file named either <code>managed-schema</code> or <code>schema.xml</code>) specifies a <code>uniqueKey</code> field called <code>id</code>. Whenever you POST commands to Solr to add a document with the same value for the <code>uniqueKey</code> as an existing document, it automatically replaces it for you.</p>
+</div>
+<div class="paragraph">
+<p>You can see that that has happened by looking at the values for <code>numDocs</code> and <code>maxDoc</code> in the core-specific Overview section of the Solr Admin UI.</p>
+</div>
+<div class="paragraph">
+<p><code>numDocs</code> represents the number of searchable documents in the index (and will be larger than the number of XML, JSON, or CSV files since some files contained more than one document). The <code>maxDoc</code> value may be larger as the <code>maxDoc</code> count includes logically deleted documents that have not yet been physically removed from the index. You can re-post the sample files over and over again as much as you want and <code>numDocs</code> will never increase, because the new documents will constantly be replacing the old.</p>
+</div>
+<div class="paragraph">
+<p>Go ahead and edit any of the existing example data files, change some of the data, and re-run the PostTool (<code>bin/post</code>). You&#8217;ll see your changes reflected in subsequent searches.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="deleting-data">Deleting Data</h3>
+<div class="paragraph">
+<p>If you need to iterate a few times to get your schema right, you may want to delete documents to clear out the collection and try again. Note, however, that merely removing documents doesn&#8217;t change the underlying field definitions. Essentially, this will allow you to reindex your data after making changes to fields for your needs.</p>
+</div>
+<div class="paragraph">
+<p>You can delete data by POSTing a delete command to the update URL and specifying the value of the document&#8217;s unique key field, or a query that matches multiple documents (be careful with that one!). We can use <code>bin/post</code> to delete documents also if we structure the request properly.</p>
+</div>
+<div class="paragraph">
+<p>Execute the following command to delete a specific document:</p>
+</div>
+<div class="paragraph">
+<p><code>bin/post -c localDocs -d "&lt;delete&gt;&lt;id&gt;SP2514N&lt;/id&gt;&lt;/delete&gt;"</code></p>
+</div>
+<div class="paragraph">
+<p>To delete all documents, you can use "delete-by-query" command like:</p>
+</div>
+<div class="paragraph">
+<p><code>bin/post -c localDocs -d "&lt;delete&gt;&lt;query&gt;*:*&lt;/query&gt;&lt;/delete&gt;"</code></p>
+</div>
+<div class="paragraph">
+<p>You can also modify the above to only delete documents that match a specific query.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="exercise-3-wrap-up">Exercise 3 Wrap Up</h3>
+<div class="paragraph">
+<p>At this point, you&#8217;re ready to start working on your own.</p>
+</div>
+<div class="paragraph">
+<p>Jump ahead to the overall <a href="#wrapping-up">wrap up</a> when you&#8217;re ready to stop Solr and remove all the examples you worked with and start fresh.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="spatial-queries">Spatial Queries</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Solr has sophisticated geospatial support, including searching within a specified distance range of a given location (or within a bounding box), sorting by distance, or even boosting results by the distance.</p>
+</div>
+<div class="paragraph">
+<p>Some of the example techproducts documents we indexed in Exercise 1 have locations associated with them to illustrate the spatial capabilities. To re-index this data, see <a href="#index-the-techproducts-data">Exercise 1</a>.</p>
+</div>
+<div class="paragraph">
+<p>Spatial queries can be combined with any other types of queries, such as in this example of querying for "ipod" within 10 kilometers from San Francisco:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/solr-tutorial/tutorial-spatial.png" alt="Solr Quick Start: spatial search">
+</div>
+<div class="title">Figure 7. Spatial queries and results</div>
+</div>
+<div class="paragraph">
+<p>This is from Solr&#8217;s example search UI (called <code>/browse</code>), which has a nice feature to show a map for each item and allow easy selection of the location to search near. You can see this yourself by going to <a href="http://localhost:8983/solr/techproducts/browse?q=ipod&amp;pt=37.7752%2C-122.4232&amp;d=10&amp;sfield=store&amp;fq=%7B%21bbox%7D&amp;queryOpts=spatial&amp;queryOpts=spatial" class="bare">http://localhost:8983/solr/techproducts/browse?q=ipod&amp;pt=37.7752%2C-122.4232&amp;d=10&amp;sfield=store&amp;fq=%7B%21bbox%7D&amp;queryOpts=spatial&amp;queryOpts=spatial</a> in a browser.</p>
+</div>
+<div class="paragraph">
+<p>To learn more about Solr&#8217;s spatial capabilities, see the section <a href="spatial-search.html#spatial-search">Spatial Search</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="wrapping-up">Wrapping Up</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you&#8217;ve run the full set of commands in this quick start guide you have done the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Launched Solr into SolrCloud mode, two nodes, two collections including shards and replicas</p>
+</li>
+<li>
+<p>Indexed several types of files</p>
+</li>
+<li>
+<p>Used the Schema API to modify your schema</p>
+</li>
+<li>
+<p>Opened the admin console, used its query interface to get results</p>
+</li>
+<li>
+<p>Opened the /browse interface to explore Solr&#8217;s features in a more friendly and familiar interface</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Nice work!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="cleanup">Cleanup</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As you work through this tutorial, you may want to stop Solr and reset the environment back to the starting point. The following command line will stop Solr and remove the directories for each of the two nodes that were created all the way back in Exercise 1:</p>
+</div>
+<div class="paragraph">
+<p><code>bin/solr stop -all ; rm -Rf example/cloud/</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="where-to-next">Where to next?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This Guide will be your best resource for learning more about Solr.</p>
+</div>
+<div class="paragraph">
+<p>Solr also has a robust community made up of people happy to help you get started. For more information, check out the Solr website&#8217;s <a href="http://lucene.apache.org/solr/resources.html">Resources page</a>.</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Adds tags, if any -->
+    <div class="tags">
+        
+    </div>
+
+<!-- Adds nav links on each page -->
+    
+    
+    <div class="scrollnav row">
+      
+      <a class="btn btn-primary prev" href="getting-started.html">Getting Started</a>
+      
+      
+      <a class="btn btn-primary next" href="a-quick-overview.html">A Quick Overview</a>
+      
+    </div>
+    
+
+</div>
+
+<footer>
+            <div class="row">
+                <div class="col-lg-12 footer">
+               &copy;2018 Apache Software Foundation. All rights reserved. <br />
+ Site Version: 7.5 <br />Site last generated: 2018-09-18 <br />
+<p><img src="images/solr-sunOnly-small.png" alt="Apache Solr"/></p>
+                </div>
+            </div>
+</footer>
+
+
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container -->
+</div>
+
+</body>
+</html>

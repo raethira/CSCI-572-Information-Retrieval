@@ -1,0 +1,89 @@
+====================================================================================================================================================================
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+====================================================================================================================================================================
+
+Name				: Rahul Ethiraj	
+USC ID				: 3765791028
+News site crawled		: https://www.nytimes.com/
+
+Fetch Statistics:
+================
+# of fetches attempted                                                  : 20000
+# of fetches succeeded                                                  : 16531
+# of fetches failed or aborted = (# fetches failed + # fetches aborted) : 3453 + 16 = 3469
+
+Outgoing URLs:
+=============
+# of total outgoing URLs              : 545025
+# of unique URLs extracted            : 167258
+# of unique URLs within news website  : 72167
+# of unique URLs outside news website : 95091
+
+Status Codes:
+============
+200 OK 			  : 16531
+301 Moved Permanently 	  : 2586
+302 Found 		  : 788
+400 Bad Request  	  : 3
+404 Not Found        	  : 24
+410 Gone 		  : 11
+500 Internal Server Error : 26
+503 Service Unavailable	  : 31
+
+File Sizes:
+==========
+< 1KB        : 1
+1KB ~ <10KB  : 9
+10KB ~ <100KB: 90
+100KB ~ <1MB : 924
+>= 1MB       : 13735
+
+Content Types:
+=============
+text/html 	: 14758
+application/pdf : 1
+
+
+====================================================================================================================================================================
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+====================================================================================================================================================================
+Notes:
+=====
+1.) There were no (image/*) content types retrieved from https://www.nytimes.com/, when crawled at 17:37 on 08/10/2018.
+
+2.) To cross verify the program code, I tried crawling https://www.mercurynews.com/ at same time in parallel and got the below results for maxPagesToFetch set to 1000.
+
+# of fetches attempted                                                  : 1000
+# of fetches succeeded                                                  : 829
+# of fetches failed or aborted = (# fetches failed + # fetches aborted) : 171 + 0 = 171
+
+# of total outgoing URLs                  : 36412
+# of unique URLs extracted                : 7472
+# of unique URLs within your news website : 5861
+# of unique URLs outside the news website : 1611
+
+Status Codes :
+============
+200 : 829
+301 : 67
+302 : 62
+400 : 42
+
+File Sizes   :
+==========
+< 1KB        : 1
+1KB ~ <10KB  : 0
+10KB ~ <100KB: 256
+100KB ~ <1MB : 436
+>= 1MB       : 0
+
+Content Types :
+=============
+image/jpeg : 4      <-----
+text/html : 688
+image/png : 1	    <-----
+
+
+====================================================================================================================================================================
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+====================================================================================================================================================================
